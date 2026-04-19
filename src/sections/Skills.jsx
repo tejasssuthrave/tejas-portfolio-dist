@@ -1,5 +1,5 @@
 import { FaReact, FaHtml5, FaCss3Alt, FaBootstrap, FaGitAlt, FaGithub, FaNpm, FaNode, FaLinux, FaAws, FaPython, FaJava, FaTerminal, FaServer, FaDatabase, FaNetworkWired } from 'react-icons/fa';
-import { SiNextdotjs, SiTailwindcss, SiExpress, SiFirebase, SiJavascript, SiMongodb, SiMysql, SiPostgresql, SiNodedotjs, SiMui, SiAxios, SiFramer, SiJsonwebtokens, SiTypescript, SiRedux, SiPostman, SiShadcnui, SiSocketdotio, SiVercel, SiRedhat, SiCentos, SiC, SiCplusplus, SiPycharm, SiIntellijidea, SiStreamlit, SiGnubash, SiJira } from 'react-icons/si';
+import { SiNextdotjs, SiTailwindcss, SiExpress, SiFirebase, SiJavascript, SiMongodb, SiMysql, SiPostgresql, SiNodedotjs, SiMui, SiAxios, SiFramer, SiJsonwebtokens, SiTypescript, SiRedux, SiPostman, SiShadcnui, SiSocketdotio, SiVercel, SiRedhat, SiCentos, SiC, SiCplusplus, SiPycharm, SiIntellijidea, SiStreamlit, SiGnubash, SiJira, SiGitlab, SiGithubactions } from 'react-icons/si';
 import { MdEmail, MdSchedule, MdStorage, MdSecurity } from 'react-icons/md';
 import { FcDataEncryption } from "react-icons/fc";
 import { VscJson, VscCode } from 'react-icons/vsc';
@@ -50,6 +50,8 @@ const categories = [
     skills: [
       { icon: <FaGitAlt />, name: "Git", level: 85 },
       { icon: <FaGithub />, name: "GitHub", level: 90 },
+      { icon: <SiGithubactions />, name: "GitHub Actions", level: 75 },
+      { icon: <SiGitlab />, name: "GitLab", level: 80 },
       { icon: <VscCode />, name: "VS Code", level: 95 },
       { icon: <SiPycharm />, name: "PyCharm", level: 80 },
       { icon: <SiIntellijidea />, name: "IntelliJ", level: 75 },

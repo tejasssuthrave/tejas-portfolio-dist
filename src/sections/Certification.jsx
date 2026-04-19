@@ -8,8 +8,18 @@ import VLSICert from "../assets/VLSI_certi.jpeg";
 import PYTCert from "../assets/PYT_certi.jpeg";
 import PYTIBMCert from "../assets/PYT_IBM_certi.png";
 import PYTINFOCert from "../assets/PYT_INFO_certi.jpeg";
+import AWSInfoCert from "../assets/AWS_INFO.jpeg";
 
 const certifications = [
+  {
+    title: "TechA AWS Solution Architect Certification",
+    issuer: "Infosys Springboard",
+    date: "Apr 2026",
+    description: "Achievement certification for successfully completing the TechA AWS Solution Architect track, validating practical cloud architecture knowledge and AWS solution design fundamentals.",
+    skills: ["AWS", "Solution Architecture", "Cloud Computing", "Infrastructure Design"],
+    image: AWSInfoCert,
+    verifyLink: "https://verify.onwingspan.com"
+  },
   {
     title: "Machine Learning for Cyber Security",
     issuer: "C-DAC Hyderabad",
@@ -214,11 +224,17 @@ const ImagePage = React.forwardRef(({ cert, pageNumber }, ref) => (
       <div className="flex-1 flex items-center justify-center w-full px-1 sm:px-4 min-h-0">
         <div className="relative group/img">
           <div className="absolute -inset-1 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-light)] rounded-lg blur opacity-20 group-hover/img:opacity-40 transition duration-500"></div>
-          <img
-            src={cert.image}
-            alt={`${cert.title} Certificate`}
-            className="relative max-w-full max-h-full object-contain rounded-lg shadow-2xl border border-[var(--border-color)] grayscale-[0.2] hover:grayscale-0 transition-all duration-500"
-          />
+          {cert.image ? (
+            <img
+              src={cert.image}
+              alt={`${cert.title} Certificate`}
+              className="relative max-w-full max-h-full object-contain rounded-lg shadow-2xl border border-[var(--border-color)] grayscale-[0.2] hover:grayscale-0 transition-all duration-500"
+            />
+          ) : (
+            <div className="relative w-[260px] sm:w-[320px] h-[180px] sm:h-[220px] rounded-lg border border-dashed border-[var(--border-color)] bg-[var(--bg-base)]/70 flex items-center justify-center text-center px-4">
+              <p className="text-xs sm:text-sm text-[var(--text-secondary)]">Certificate image will appear here once added to assets.</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -238,7 +254,11 @@ const MobileFlipCard = ({ cert, isOpen, onToggle }) => (
     >
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 rounded-lg border border-[var(--border-color)] bg-[var(--bg-base)] flex items-center justify-center overflow-hidden">
-          <img src={cert.image} alt={`${cert.title} thumb`} className="max-w-full max-h-full object-contain" />
+          {cert.image ? (
+            <img src={cert.image} alt={`${cert.title} thumb`} className="max-w-full max-h-full object-contain" />
+          ) : (
+            <span className="text-[10px] font-mono text-[var(--text-secondary)]">No image</span>
+          )}
         </div>
         <div className="text-left">
           <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-[var(--accent)]/70">Credential</p>
@@ -265,7 +285,13 @@ const MobileFlipCard = ({ cert, isOpen, onToggle }) => (
         className="origin-top"
       >
         <div className="rounded-xl border border-[var(--border-color)] bg-black/40 overflow-hidden mb-3">
-          <img src={cert.image} alt={cert.title} className="w-full object-cover" />
+          {cert.image ? (
+            <img src={cert.image} alt={cert.title} className="w-full object-cover" />
+          ) : (
+            <div className="w-full h-36 flex items-center justify-center text-center px-4">
+              <p className="text-xs text-[var(--text-secondary)]">Add the certificate image file to show preview.</p>
+            </div>
+          )}
         </div>
         <p className="text-sm text-white font-semibold mb-1">{cert.title}</p>
         <p className="text-xs text-[var(--text-secondary)] mb-3 italic">{cert.description}</p>

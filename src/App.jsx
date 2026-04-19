@@ -13,6 +13,7 @@ import Certification from "./sections/Certification";
 import Contact from "./sections/Contact";
 import Footer from "./sections/Footer";
 import BackToTop from "./components/BackToTop";
+import MusicPlayer from "./components/MusicPlayer";
 
 export default function App() {
   const [introDone, setIntroDone] = useState(false);
@@ -23,6 +24,7 @@ export default function App() {
       <CustomCursor />
       <Navbar />
       <BackToTop />
+      <MusicPlayer />
 
       {/* Intro always on top until it finishes */}
       {!introDone && <IntroAnimation onFinish={() => setIntroDone(true)} />}
