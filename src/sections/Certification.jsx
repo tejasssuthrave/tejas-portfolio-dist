@@ -11,6 +11,15 @@ import PYTINFOCert from "../assets/PYT_INFO_certi.jpeg";
 
 const certifications = [
   {
+    title: "TechA AWS Solution Architect Certification",
+    issuer: "Infosys Springboard",
+    date: "Apr 10, 2026",
+    description: "Successfully completed the TechA AWS Solution Architect certification program, covering cloud architecture fundamentals, AWS core services, and practical design principles for scalable and reliable solutions.",
+    skills: ["AWS", "Solution Architecture", "Cloud Design", "EC2", "S3", "IAM"],
+    image: PYTINFOCert,
+    verifyLink: "https://verify.onwingspan.com"
+  },
+  {
     title: "Machine Learning for Cyber Security",
     issuer: "C-DAC Hyderabad",
     date: "Oct 2025",

@@ -1,5 +1,5 @@
 import { FaReact, FaHtml5, FaCss3Alt, FaBootstrap, FaGitAlt, FaGithub, FaNpm, FaNode, FaLinux, FaAws, FaPython, FaJava, FaTerminal, FaServer, FaDatabase, FaNetworkWired } from 'react-icons/fa';
-import { SiNextdotjs, SiTailwindcss, SiExpress, SiFirebase, SiJavascript, SiMongodb, SiMysql, SiPostgresql, SiNodedotjs, SiMui, SiAxios, SiFramer, SiJsonwebtokens, SiTypescript, SiRedux, SiPostman, SiShadcnui, SiSocketdotio, SiVercel, SiRedhat, SiCentos, SiC, SiCplusplus, SiPycharm, SiIntellijidea, SiStreamlit, SiGnubash, SiJira } from 'react-icons/si';
+import { SiNextdotjs, SiTailwindcss, SiExpress, SiFirebase, SiJavascript, SiMongodb, SiMysql, SiPostgresql, SiNodedotjs, SiMui, SiAxios, SiFramer, SiJsonwebtokens, SiTypescript, SiRedux, SiPostman, SiShadcnui, SiSocketdotio, SiVercel, SiRedhat, SiCentos, SiC, SiCplusplus, SiPycharm, SiIntellijidea, SiStreamlit, SiGnubash, SiJira, SiGitlab } from 'react-icons/si';
 import { MdEmail, MdSchedule, MdStorage, MdSecurity } from 'react-icons/md';
 import { FcDataEncryption } from "react-icons/fc";
 import { VscJson, VscCode } from 'react-icons/vsc';
@@ -22,19 +22,7 @@ const categories = [
       { icon: <MdStorage />, name: "Disk & File Systems", level: 85 },
     ],
   },
-  {
-    title: "AWS Cloud",
-    skills: [
-      { icon: <FaAws />, name: "AWS", level: 80 },
-      { icon: <FaServer />, name: "EC2", level: 85 },
-      { icon: <MdStorage />, name: "S3", level: 90 },
-      { icon: <MdSecurity />, name: "IAM", level: 80 },
-      { icon: <FaDatabase />, name: "RDS", level: 75 },
-      { icon: <FaNetworkWired />, name: "VPC", level: 70 },
-      { icon: <AiOutlineCloudServer />, name: "Load Balancer", level: 75 },
-    ],
-  },
-  {
+    {
     title: "Programming Languages",
     skills: [
       { icon: <FaPython />, name: "Python", level: 85 },
@@ -46,15 +34,48 @@ const categories = [
     ],
   },
   {
+    title: "AWS Cloud",
+    skills: [
+      { icon: <FaAws />, name: "AWS", level: 80 },
+      { icon: <FaServer />, name: "EC2", level: 85 },
+      { icon: <MdStorage />, name: "EBS & Snapshots", level: 80 },
+      { icon: <MdStorage />, name: "S3 (Versioning, Lifecycle, CRR)", level: 90 },
+      { icon: <MdSecurity />, name: "IAM", level: 85 },
+      { icon: <FaNetworkWired />, name: "VPC", level: 80 },
+      { icon: <FaNetworkWired />, name: "Route 53", level: 75 },
+      { icon: <MdSchedule />, name: "CloudWatch", level: 80 },
+      { icon: <BsFileEarmarkArrowUp />, name: "CloudFront", level: 75 },
+      { icon: <FaDatabase />, name: "RDS", level: 80 },
+      { icon: <FaDatabase />, name: "DynamoDB", level: 75 },
+      { icon: <AiOutlineCloudServer />, name: "Auto Scaling", level: 75 },
+      { icon: <AiOutlineCloudServer />, name: "Load Balancer", level: 80 },
+      { icon: <MdEmail />, name: "SNS", level: 70 },
+      { icon: <MdSecurity />, name: "CloudTrail", level: 75 },
+      { icon: <FaAws />, name: "Elastic Beanstalk", level: 70 },
+    ],
+  },
+  {
     title: "Tools & Platforms",
     skills: [
       { icon: <FaGitAlt />, name: "Git", level: 85 },
       { icon: <FaGithub />, name: "GitHub", level: 90 },
+      { icon: <FaGithub />, name: "GitActions", level: 75 },
+      { icon: <SiGitlab />, name: "GitLab", level: 75 },
       { icon: <VscCode />, name: "VS Code", level: 95 },
       { icon: <SiPycharm />, name: "PyCharm", level: 80 },
       { icon: <SiIntellijidea />, name: "IntelliJ", level: 75 },
       { icon: <SiStreamlit />, name: "Streamlit", level: 70 },
       { icon: <SiJira />, name: "Jira", level: 80 },
+    ],
+  },
+  {
+    title: "DevOps (Learning)",
+    skills: [
+      { icon: <FaGitAlt />, name: "CI/CD Concepts", level: 70 },
+      { icon: <FaGithub />, name: "GitActions", level: 75 },
+      { icon: <SiGitlab />, name: "GitLab", level: 75 },
+      { icon: <FcDataEncryption />, name: "CloudFormation", level: 75 },
+      { icon: <FaServer />, name: "ECS", level: 70 },
     ],
   },
 ];

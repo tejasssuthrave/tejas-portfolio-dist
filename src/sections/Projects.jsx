@@ -12,6 +12,13 @@ export default function Projects() {
   const projects = React.useMemo(
     () => [
       {
+        title: "EdgeServe AWS",
+        link: "https://github.com/tejasssuthrave/EdgeServe-AWS-Project",
+        bgColor: "#050505",
+        image: "https://blog.greencloudvps.com/wp-content/uploads/2023/06/edge-server-3-850x407.jpg",
+        technologies: ["AWS", "Edge Computing", "Lambda@Edge", "CloudFront"],
+      },
+      {
         title: "CloudCost AI Assistant",
         link: "https://github.com/tejasssuthrave/CloudCost-AI-Smart-AWS-Cost-Optimization-Assistant",
         bgColor: "#050505",
@@ -29,14 +36,14 @@ export default function Projects() {
         title: "Serverless Food Ordering",
         link: "https://github.com/tejasssuthrave/Serverless-Food-Ordering-App-Using-AWS",
         bgColor: "#050505",
-        image: "https://tse2.mm.bing.net/th/id/OIP.VXZkydhp6kdozVdKgjoGuAHaEi?rs=1&pid=ImgDetMain&o=7&rm=3",
+        image: "https://th.bing.com/th/id/R.557d3e7f3e397843e7bf45d1139e49c7?rik=f9jsaBo7txFrRA&riu=http%3a%2f%2funblast.com%2fwp-content%2fuploads%2f2021%2f07%2fFood-Delivery-App-Template.jpg&ehk=ctzybkn3uUuvMgVjPvVds0xjEPF57VwnVvyoVMc3Mgw%3d&risl=&pid=ImgRaw&r=0",
         technologies: ["AWS Lambda", "API Gateway", "S3", "DynamoDB"],
       },
       {
         title: "EC2 AutoPark",
         link: "https://github.com/tejasssuthrave/EC2-AutoPark-AWS-EC2-Cost-Optimization-Automation",
         bgColor: "#050505",
-        image: "https://tse4.mm.bing.net/th/id/OIP.a-ICu98pGswahpO8BOfw2wHaD4?rs=1&pid=ImgDetMain&o=7&rm=3",
+        image: "https://astconsulting.in/wp-content/uploads/2025/03/aws-cost-optimization-taming-the-cloud-spend-beast-featured.jpg",
         technologies: ["AWS Lambda", "Python", "EventBridge", "EC2"],
       },
       {
