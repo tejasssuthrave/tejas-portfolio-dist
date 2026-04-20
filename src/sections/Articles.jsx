@@ -3,62 +3,115 @@ import { motion } from "framer-motion";
 import { SiSubstack } from "react-icons/si";
 
 export default function Articles() {
+  const FEED_URL = "https://tejasssuthrave.substack.com/feed";
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const getSummaryFromHtml = (html = "") => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const plainText = (tempDiv.textContent || tempDiv.innerText || "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    const sentences = plainText.match(/[^.!?]+[.!?]+/g) || [plainText];
+    let refinedSummary = sentences.slice(0, 2).join(" ");
+
+    if (refinedSummary.length < 50 && plainText.length > 50) {
+      refinedSummary = `${plainText.substring(0, 120)}...`;
+    }
+
+    return {
+      summary: refinedSummary,
+      firstImage:
+        tempDiv.querySelector("img")?.src ||
+        "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop",
+    };
+  };
+
+  const formatArticles = (items = []) => {
+    return items
+      .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
+      .slice(0, 3)
+      .map((item) => {
+        const { summary, firstImage } = getSummaryFromHtml(
+          item.content || item.description || ""
+        );
+
+        return {
+          title: item.title,
+          summary,
+          date: new Date(item.pubDate).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          }),
+          readTime: "5 min read",
+          link: item.link,
+          image:
+            item.thumbnail ||
+            item.enclosure?.link ||
+            firstImage ||
+            "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop",
+        };
+      });
+  };
+
+  const fetchViaRss2Json = async () => {
+    const cacheBustedFeed = `${FEED_URL}?v=${Date.now()}`;
+    const response = await fetch(
+      `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(cacheBustedFeed)}&count=10`
+    );
+    const data = await response.json();
+
+    if (data.status !== "ok" || !Array.isArray(data.items)) {
+      throw new Error("rss2json fetch failed");
+    }
+
+    return data.items;
+  };
+
+  const fetchViaAllOrigins = async () => {
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+      FEED_URL
+    )}&v=${Date.now()}`;
+    const response = await fetch(proxyUrl);
+    if (!response.ok) {
+      throw new Error("AllOrigins fetch failed");
+    }
+
+    const xmlText = await response.text();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlText, "application/xml");
+    const items = Array.from(xml.querySelectorAll("item"));
+
+    return items.map((item) => ({
+      title: item.querySelector("title")?.textContent || "Untitled",
+      link: item.querySelector("link")?.textContent || "https://tejasssuthrave.substack.com/",
+      pubDate: item.querySelector("pubDate")?.textContent || new Date().toISOString(),
+      content:
+        item.querySelector("content\\:encoded")?.textContent ||
+        item.querySelector("description")?.textContent ||
+        "",
+      description: item.querySelector("description")?.textContent || "",
+      thumbnail: "",
+    }));
+  };
+
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        // Using rss2json to fetch and parse the Substack RSS feed
-        const response = await fetch(
-          `https://api.rss2json.com/v1/api.json?rss_url=https://tejasssuthrave.substack.com/feed`
-        );
-        const data = await response.json();
+        const rssItems = await fetchViaRss2Json().catch(() => null);
+        const fallbackItems = rssItems ? null : await fetchViaAllOrigins().catch(() => null);
+        const items = rssItems || fallbackItems;
 
-        if (data.status === "ok") {
-          // Map the RSS items to our article format
-          const formattedArticles = data.items.slice(0, 3).map((item) => {
-            // Extract a summary from the content (strip HTML)
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = item.content || item.description;
-            
-            // Extract the first image if thumbnail is missing
-            let extractedImage = item.thumbnail;
-            if (!extractedImage) {
-              const img = tempDiv.querySelector("img");
-              if (img) extractedImage = img.src;
-            }
-
-            const plainText = (tempDiv.textContent || tempDiv.innerText || "").replace(/\s+/g, ' ').trim();
-            
-            // Refine summary: Get first two sentences for a more engaging lead
-            const sentences = plainText.match(/[^.!?]+[.!?]+/g) || [plainText];
-            let refinedSummary = sentences.slice(0, 2).join(' ');
-            
-            // Fallback if no sentences detected or too short
-            if (refinedSummary.length < 50 && plainText.length > 50) {
-              refinedSummary = plainText.substring(0, 120) + "...";
-            }
-
-            return {
-              title: item.title,
-              summary: refinedSummary,
-              date: new Date(item.pubDate).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              }),
-              readTime: "5 min read", // Substack doesn't provide this in RSS, defaulting
-              link: item.link,
-              // Use the extracted image or a fallback tech image
-              image: extractedImage || `https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop`,
-            };
-          });
-          setArticles(formattedArticles);
-        } else {
-          throw new Error("Failed to fetch articles");
+        if (!items || items.length === 0) {
+          throw new Error("No feed items returned");
         }
+
+        setArticles(formatArticles(items));
+        setError(null);
       } catch (err) {
         console.error("Error fetching Substack articles:", err);
         setError("Could not load latest articles. Please check back later.");
@@ -173,6 +226,12 @@ export default function Articles() {
               </motion.a>
             ))}
           </div>
+        )}
+
+        {error && (
+          <p className="mt-6 text-center text-xs md:text-sm text-amber-300/90">
+            {error}
+          </p>
         )}
 
         <motion.div
