@@ -1,5 +1,5 @@
 import { FaReact, FaHtml5, FaCss3Alt, FaBootstrap, FaGitAlt, FaGithub, FaNpm, FaNode, FaLinux, FaAws, FaPython, FaJava, FaTerminal, FaServer, FaDatabase, FaNetworkWired } from 'react-icons/fa';
-import { SiNextdotjs, SiTailwindcss, SiExpress, SiFirebase, SiJavascript, SiMongodb, SiMysql, SiPostgresql, SiNodedotjs, SiMui, SiAxios, SiFramer, SiJsonwebtokens, SiTypescript, SiRedux, SiPostman, SiShadcnui, SiSocketdotio, SiVercel, SiRedhat, SiCentos, SiC, SiCplusplus, SiPycharm, SiIntellijidea, SiStreamlit, SiGnubash, SiJira, SiGitlab } from 'react-icons/si';
+import { SiNextdotjs, SiTailwindcss, SiExpress, SiFirebase, SiJavascript, SiMongodb, SiMysql, SiPostgresql, SiNodedotjs, SiMui, SiAxios, SiFramer, SiJsonwebtokens, SiTypescript, SiRedux, SiPostman, SiShadcnui, SiSocketdotio, SiVercel, SiRedhat, SiCentos, SiC, SiCplusplus, SiPycharm, SiIntellijidea, SiStreamlit, SiGnubash, SiJira, SiGitlab, SiDocker } from 'react-icons/si';
 import { MdEmail, MdSchedule, MdStorage, MdSecurity } from 'react-icons/md';
 import { FcDataEncryption } from "react-icons/fc";
 import { VscJson, VscCode } from 'react-icons/vsc';
@@ -74,6 +74,7 @@ const categories = [
       { icon: <FaGitAlt />, name: "CI/CD Concepts", level: 70 },
       { icon: <FaGithub />, name: "GitActions", level: 75 },
       { icon: <SiGitlab />, name: "GitLab", level: 75 },
+      { icon: <SiDocker />, name: "Docker", level: 70 },
       { icon: <FcDataEncryption />, name: "CloudFormation", level: 75 },
       { icon: <FaServer />, name: "ECS", level: 70 },
     ],
