@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { SiSubstack } from "react-icons/si";
 
 export default function Articles() {
   const FEED_URL = "https://tejasssuthrave.substack.com/feed";
+  const SUBSTACK_ARCHIVE_URL = "https://tejasssuthrave.substack.com/api/v1/archive?sort=new";
+  const SUBSTACK_ARCHIVE_PROXY_URL = "https://api.codetabs.com/v1/proxy?quest=";
+  const SUBSTACK_PUBLICATION_URL = "https://tejasssuthrave.substack.com";
+  const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -58,10 +61,81 @@ export default function Articles() {
       });
   };
 
+  const formatSubstackArchiveArticles = (items = []) => {
+    return items
+      .sort((a, b) => new Date(b.post_date) - new Date(a.post_date))
+      .slice(0, 3)
+      .map((item) => ({
+        title: item.title || "Untitled",
+        summary:
+          item.subtitle ||
+          item.description ||
+          item.truncated_body_text ||
+          "Read the latest article on Substack.",
+        date: new Date(item.post_date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        }),
+        readTime: "5 min read",
+        link:
+          (item.slug ? `${SUBSTACK_PUBLICATION_URL}/p/${item.slug}` : null) ||
+          item.canonical_url ||
+          SUBSTACK_PUBLICATION_URL,
+        image:
+          item.cover_image ||
+          "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop",
+      }));
+  };
+
+  const fetchViaSubstackArchiveProxy = async () => {
+    const proxiedUrl = `${SUBSTACK_ARCHIVE_PROXY_URL}${encodeURIComponent(
+      `${SUBSTACK_ARCHIVE_URL}&t=${Date.now()}`
+    )}`;
+    const response = await fetch(proxiedUrl, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      throw new Error("Substack archive proxy fetch failed");
+    }
+
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error("Substack archive proxy returned no items");
+    }
+
+    return data;
+  };
+
+  const fetchViaSubstackArchive = async () => {
+    const response = await fetch(`${SUBSTACK_ARCHIVE_URL}&t=${Date.now()}`, {
+      cache: "no-store",
+      headers: {
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Substack archive fetch failed");
+    }
+
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error("Substack archive returned no items");
+    }
+
+    return data;
+  };
+
   const fetchViaRss2Json = async () => {
     const cacheBustedFeed = `${FEED_URL}?v=${Date.now()}`;
     const response = await fetch(
-      `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(cacheBustedFeed)}&count=10`
+      `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(cacheBustedFeed)}&count=10`,
+      {
+        cache: "no-store",
+      }
     );
     const data = await response.json();
 
@@ -76,7 +150,9 @@ export default function Articles() {
     const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(
       FEED_URL
     )}&v=${Date.now()}`;
-    const response = await fetch(proxyUrl);
+    const response = await fetch(proxyUrl, {
+      cache: "no-store",
+    });
     if (!response.ok) {
       throw new Error("AllOrigins fetch failed");
     }
@@ -100,21 +176,42 @@ export default function Articles() {
   };
 
   useEffect(() => {
-    const fetchArticles = async () => {
+    let isMounted = true;
+
+    const fetchArticles = async ({ isInitialLoad = false } = {}) => {
       try {
-        const rssItems = await fetchViaRss2Json().catch(() => null);
-        const fallbackItems = rssItems ? null : await fetchViaAllOrigins().catch(() => null);
-        const items = rssItems || fallbackItems;
+        const proxyArchiveItems = await fetchViaSubstackArchiveProxy().catch(() => null);
+        const archiveItems = proxyArchiveItems
+          ? null
+          : await fetchViaSubstackArchive().catch(() => null);
+        const rssItems = proxyArchiveItems || archiveItems ? null : await fetchViaRss2Json().catch(() => null);
+        const fallbackItems =
+          proxyArchiveItems || archiveItems || rssItems
+            ? null
+            : await fetchViaAllOrigins().catch(() => null);
+        const items = proxyArchiveItems || archiveItems || rssItems || fallbackItems;
 
         if (!items || items.length === 0) {
           throw new Error("No feed items returned");
         }
 
-        setArticles(formatArticles(items));
+        if (!isMounted) {
+          return;
+        }
+
+        const formatted = proxyArchiveItems || archiveItems
+          ? formatSubstackArchiveArticles(items)
+          : formatArticles(items);
+
+        setArticles(formatted);
         setError(null);
       } catch (err) {
         console.error("Error fetching Substack articles:", err);
-        setError("Could not load latest articles. Please check back later.");
+        if (!isMounted) {
+          return;
+        }
+
+        setError("Could not load latest articles right now. Retrying automatically.");
         // Fallback to some default data if fetch fails
         setArticles([
           {
@@ -135,11 +232,31 @@ export default function Articles() {
           }
         ]);
       } finally {
-        setLoading(false);
+        if (isMounted && isInitialLoad) {
+          setLoading(false);
+        }
       }
     };
 
-    fetchArticles();
+    fetchArticles({ isInitialLoad: true });
+
+    const intervalId = window.setInterval(() => {
+      fetchArticles();
+    }, REFRESH_INTERVAL_MS);
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchArticles();
+      }
+    };
+
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    return () => {
+      isMounted = false;
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+    };
   }, []);
 
   return (
