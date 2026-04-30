@@ -8,15 +8,26 @@ import VLSICert from "../assets/VLSI_certi.jpeg";
 import PYTCert from "../assets/PYT_certi.jpeg";
 import PYTIBMCert from "../assets/PYT_IBM_certi.png";
 import PYTINFOCert from "../assets/PYT_INFO_certi.jpeg";
+import AWSINFOCert from "../assets/AWS_INFO_certi.png";
+import AWSQuestCert from "../assets/AWS_AWS_QUEST.png";
 
 const certifications = [
+  {
+    title: "AWS Cloud Quest — Cloud Practitioner (Trained)",
+    issuer: "AWS",
+    date: "Apr 2026",
+    description: "Completed the AWS Cloud Quest Cloud Practitioner training program in April 2026 — foundational cloud concepts, AWS core services, and best practices for cloud security and cost management.",
+    skills: ["AWS", "Cloud Fundamentals", "Cloud Quest", "Cloud Practitioner"],
+    image: AWSQuestCert,
+    verifyLink: "#"
+  },
   {
     title: "TechA AWS Solution Architect Certification",
     issuer: "Infosys Springboard",
     date: "Apr 10, 2026",
     description: "Successfully completed the TechA AWS Solution Architect certification program, covering cloud architecture fundamentals, AWS core services, and practical design principles for scalable and reliable solutions.",
     skills: ["AWS", "Solution Architecture", "Cloud Design", "EC2", "S3", "IAM"],
-    image: PYTINFOCert,
+    image: AWSINFOCert,
     verifyLink: "https://verify.onwingspan.com"
   },
   {
